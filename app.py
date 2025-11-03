@@ -44,13 +44,16 @@ def home():
 
     out += f"\nRefresh every <input id=s value=60 size=2> sec "
     out += "<button onclick=\"clearInterval(i);i=setInterval(go,s.value*1000);go()\">GO</button>"
-    out += f"<script>"
-    out += f"function go(){{location.reload()}}"
-    out += f"let countdown={{mm:{mins_to_next},ss:{secs_to_refresh}}};"
-    out += f"setInterval(()=>{if(--countdown.ss<0){countdown.ss=59;--countdown.mm};"
-    out += f"document.querySelector('h2').innerText=`Next candle: ${{String(countdown.mm).padStart(2,'0')}}:${{String(countdown.ss).padStart(2,'0')}} mm:ss`},1000);"
-    out += f"let i=setInterval(go,60000); go();"
-    out += f"</script>"
+        out += "<script>"
+    out += "function go(){location.reload()}"
+    out += "let c={mm:%d,ss:%d};" % (mins_to_next, secs_to_refresh)
+    out += "setInterval(()=>{"
+    out += "  if(--c.ss<0){c.ss=59; if(c.mm>0) c.mm--}"
+    out += "  document.querySelector('h2').innerText="
+    out += "    `Next candle: ${String(c.mm).padStart(2,'0')}:${String(c.ss).padStart(2,'0')} mm:ss`"
+    out += "},1000);"
+    out += "let i=setInterval(go,60000);"
+    out += "</script>"
     return render_template_string('<body bgcolor=#000 text=#0f0 style="font:22px monospace">' + out)
 
 if __name__ == "__main__":
