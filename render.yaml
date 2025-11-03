@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: screener
+    env: python
+    buildCommand: pip install flask pandas tqdm
+    startCommand: python app.py
+    plan: free
